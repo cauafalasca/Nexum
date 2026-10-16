@@ -1,15 +1,13 @@
 <?php
 $pageTitle = 'Loja — Jogos Físicos';
 $bodyClass = 'page-inner';
-require_once __DIR__ . '/php/header.php';
+require_once __DIR__ . '/php/config.php';
 
-$jogos = [
-    ['img' => 'game-mgs.jpg',   'titulo' => 'Metal Gear Solid',        'plataforma' => 'PS1',  'midia' => 'CD',      'genero' => 'Ação / Stealth',   'preco' => 'R$ 180,00'],
-    ['img' => 'game-ff7.jpg',   'titulo' => 'Final Fantasy VII',        'plataforma' => 'PS1',  'midia' => 'CD',      'genero' => 'RPG',               'preco' => 'R$ 320,00'],
-    ['img' => 'game-crash.jpg', 'titulo' => 'Crash Bandicoot',          'plataforma' => 'PS1',  'midia' => 'CD',      'genero' => 'Plataforma',        'preco' => 'R$ 150,00'],
-    ['img' => 'game-gow.jpg',   'titulo' => 'God of War',               'plataforma' => 'PS2',  'midia' => 'DVD',     'genero' => 'Ação / Mitologia',  'preco' => 'R$ 210,00'],
-    ['img' => 'game-zelda.jpg', 'titulo' => 'Zelda: Ocarina of Time',   'plataforma' => 'N64',  'midia' => 'Cartucho','genero' => 'Aventura / RPG',    'preco' => 'R$ 480,00'],
-];
+$pdo = get_db();
+$stmtJogos = $pdo->query("SELECT id, titulo, plataforma, midia, genero, preco, imagem, estoque FROM produtos WHERE tipo = 'jogo' AND status = 'ativo' ORDER BY id ASC");
+$jogos = $stmtJogos->fetchAll();
+
+require_once __DIR__ . '/php/header.php';
 ?>
 
     <main>
@@ -27,19 +25,24 @@ $jogos = [
                     <?php foreach ($jogos as $j): ?>
                     <article class="game-card">
                         <div class="game-card__img-wrap">
-                            <img src="assets/<?= $j['img'] ?>" alt="<?= htmlspecialchars($j['titulo']) ?>" loading="lazy">
-                            <span class="game-card__platform"><?= $j['plataforma'] ?></span>
-                            <span class="game-card__badge-midia"><?= $j['midia'] ?></span>
+                            <img src="assets/<?= !empty($j['imagem']) ? $j['imagem'] : ($j['img'] ?? 'game-mgs.jpg') ?>" alt="<?= htmlspecialchars($j['titulo']) ?>" loading="lazy">
+                            <span class="game-card__platform"><?= htmlspecialchars($j['plataforma']) ?></span>
+                            <span class="game-card__badge-midia"><?= htmlspecialchars($j['midia']) ?></span>
                         </div>
                         <div class="game-card__body">
                             <h3 class="game-card__title"><?= htmlspecialchars($j['titulo']) ?></h3>
-                            <p class="game-card__genre"><?= $j['genero'] ?></p>
+                            <p class="game-card__genre"><?= htmlspecialchars($j['genero']) ?></p>
                             <div class="game-card__footer">
                                 <div>
                                     <span class="game-card__price-label">por</span>
-                                    <span class="game-card__price"><?= $j['preco'] ?></span>
+                                    <span class="game-card__price">R$ <?= number_format($j['preco'], 2, ',', '.') ?></span>
                                 </div>
                                 <button class="game-card__btn" title="Adicionar ao carrinho">+</button>
+                            </div>
+                            <div class="game-card__chat-cta">
+                                <a href="mensagens.php?produto=<?= urlencode($j['titulo'] . ' (' . $j['plataforma'] . ')') ?>" class="btn-card-chat" title="Tirar dúvidas com o vendedor deste jogo">
+                                    <span>💬</span> Falar com vendedor
+                                </a>
                             </div>
                         </div>
                     </article>

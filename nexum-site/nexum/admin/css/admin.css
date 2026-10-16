@@ -73,16 +73,39 @@ p { margin: 0 0 1em; color: var(--silver-dim); }
 }
 
 .login-card__logo {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: 1.6rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    color: var(--silver);
-    margin-bottom: 6px;
+    margin-bottom: 12px;
 }
 
-.login-card__logo span { color: var(--accent); }
+.nexum-logo {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    vertical-align: middle;
+}
+
+.nexum-logo__img {
+    height: 32px;
+    width: auto;
+    max-width: 130px;
+    object-fit: contain;
+    mix-blend-mode: screen;
+    filter: brightness(1.1) contrast(1.05);
+}
+
+.sidebar__logo .nexum-logo__img,
+.nexum-logo--small .nexum-logo__img {
+    height: 24px;
+    max-width: 100px;
+}
+
+.logo__games {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--accent);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+}
 
 .login-card__sub {
     font-size: 0.78rem;

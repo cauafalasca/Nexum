@@ -36,7 +36,10 @@ if (!empty($_SESSION['admin_logged_in'])) {
 
     <div class="login-card">
         <div class="login-card__logo">
-            Nexum <span>Games</span>
+            <?php 
+            $basePath = '../';
+            include __DIR__ . '/../php/logo.php'; 
+            ?>
         </div>
         <div class="login-card__sub">Painel Administrativo</div>
 

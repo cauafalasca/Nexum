@@ -1,6 +1,12 @@
 <?php
 $pageTitle = 'Início';
 $bodyClass = 'page-home';
+require_once __DIR__ . '/php/config.php';
+
+$pdo = get_db();
+$stmtDestaques = $pdo->query("SELECT id, titulo, plataforma, midia, genero, preco, imagem FROM produtos WHERE tipo = 'jogo' AND status = 'ativo' ORDER BY id ASC LIMIT 3");
+$destaques = $stmtDestaques->fetchAll();
+
 require_once __DIR__ . '/php/header.php';
 ?>
 
@@ -80,62 +86,31 @@ require_once __DIR__ . '/php/header.php';
                 </div>
 
                 <div class="catalog-grid">
+                    <?php foreach ($destaques as $d): ?>
                     <article class="game-card">
                         <div class="game-card__img-wrap">
-                            <img src="assets/game-mgs.jpg" alt="Metal Gear Solid - PlayStation 1" loading="lazy">
-                            <span class="game-card__platform">PS1</span>
-                            <span class="game-card__badge-midia">CD</span>
+                            <img src="assets/<?= !empty($d['imagem']) ? $d['imagem'] : 'game-mgs.jpg' ?>" alt="<?= htmlspecialchars($d['titulo']) ?>" loading="lazy">
+                            <span class="game-card__platform"><?= htmlspecialchars($d['plataforma']) ?></span>
+                            <span class="game-card__badge-midia"><?= htmlspecialchars($d['midia']) ?></span>
                         </div>
                         <div class="game-card__body">
-                            <h3 class="game-card__title">Metal Gear Solid</h3>
-                            <p class="game-card__genre">Ação / Stealth</p>
+                            <h3 class="game-card__title"><?= htmlspecialchars($d['titulo']) ?></h3>
+                            <p class="game-card__genre"><?= htmlspecialchars($d['genero']) ?></p>
                             <div class="game-card__footer">
                                 <div>
                                     <span class="game-card__price-label">por</span>
-                                    <span class="game-card__price">R$ 180,00</span>
+                                    <span class="game-card__price">R$ <?= number_format($d['preco'], 2, ',', '.') ?></span>
                                 </div>
                                 <button class="game-card__btn" title="Adicionar ao carrinho">+</button>
                             </div>
-                        </div>
-                    </article>
-
-                    <article class="game-card">
-                        <div class="game-card__img-wrap">
-                            <img src="assets/game-ff7.jpg" alt="Final Fantasy VII - PlayStation 1" loading="lazy">
-                            <span class="game-card__platform">PS1</span>
-                            <span class="game-card__badge-midia">CD</span>
-                        </div>
-                        <div class="game-card__body">
-                            <h3 class="game-card__title">Final Fantasy VII</h3>
-                            <p class="game-card__genre">RPG</p>
-                            <div class="game-card__footer">
-                                <div>
-                                    <span class="game-card__price-label">por</span>
-                                    <span class="game-card__price">R$ 320,00</span>
-                                </div>
-                                <button class="game-card__btn" title="Adicionar ao carrinho">+</button>
+                            <div class="game-card__chat-cta">
+                                <a href="mensagens.php?produto=<?= urlencode($d['titulo'] . ' (' . $d['plataforma'] . ')') ?>" class="btn-card-chat" title="Tirar dúvidas com o vendedor deste jogo">
+                                    <span>💬</span> Falar com vendedor
+                                </a>
                             </div>
                         </div>
                     </article>
-
-                    <article class="game-card">
-                        <div class="game-card__img-wrap">
-                            <img src="assets/game-crash.jpg" alt="Crash Bandicoot - PlayStation 1" loading="lazy">
-                            <span class="game-card__platform">PS1</span>
-                            <span class="game-card__badge-midia">CD</span>
-                        </div>
-                        <div class="game-card__body">
-                            <h3 class="game-card__title">Crash Bandicoot</h3>
-                            <p class="game-card__genre">Plataforma</p>
-                            <div class="game-card__footer">
-                                <div>
-                                    <span class="game-card__price-label">por</span>
-                                    <span class="game-card__price">R$ 150,00</span>
-                                </div>
-                                <button class="game-card__btn" title="Adicionar ao carrinho">+</button>
-                            </div>
-                        </div>
-                    </article>
+                    <?php endforeach; ?>
 
                     <article class="game-card">
                         <div class="game-card__img-wrap">

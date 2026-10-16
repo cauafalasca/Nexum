@@ -4,7 +4,13 @@ $adminUser = $_SESSION['admin_user'] ?? 'admin';
 ?>
 <aside class="admin-sidebar">
     <div class="sidebar__brand">
-        <div class="sidebar__logo">Nexum <span>Games</span></div>
+        <div class="sidebar__logo">
+            <?php 
+            $basePath = '../';
+            $logoSmall = true;
+            include __DIR__ . '/../../php/logo.php'; 
+            ?>
+        </div>
         <span class="sidebar__badge">Admin Panel</span>
     </div>
 

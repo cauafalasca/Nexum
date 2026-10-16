@@ -55,4 +55,39 @@
             }
         });
     });
+
+    /* =========================================================================
+       Gestão de Tema (Modo Escuro / Modo Claro)
+       ========================================================================= */
+    window.setTheme = function(theme) {
+        document.documentElement.setAttribute('data-theme', theme);
+        localStorage.setItem('nexum_theme', theme);
+        document.cookie = "nexum_theme=" + theme + ";path=/;max-age=" + (365 * 86400);
+        updateThemeUI(theme);
+    };
+
+    window.toggleTheme = function() {
+        var current = document.documentElement.getAttribute('data-theme') || 'dark';
+        var next = current === 'dark' ? 'light' : 'dark';
+        window.setTheme(next);
+    };
+
+    function updateThemeUI(theme) {
+        var icon = document.getElementById('themeToggleIcon');
+        if (icon) {
+            icon.textContent = theme === 'dark' ? '🌙' : '☀️';
+        }
+        var toggleBtn = document.getElementById('themeToggleBtn');
+        if (toggleBtn) {
+            toggleBtn.setAttribute('title', theme === 'dark' ? 'Alternar para Modo Claro' : 'Alternar para Modo Escuro');
+        }
+        // Se estiver na tela de configurações, atualiza botões
+        document.querySelectorAll('[data-theme-choice]').forEach(function(el) {
+            el.classList.toggle('is-selected', el.getAttribute('data-theme-choice') === theme);
+        });
+    }
+
+    // Inicialização ao carregar
+    var currentTheme = localStorage.getItem('nexum_theme') || 'dark';
+    updateThemeUI(currentTheme);
 })();
